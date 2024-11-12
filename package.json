@@ -1,0 +1,16 @@
+{
+  "name": "canvas-helper",
+  "version": "1.0.0",
+  "description": "Canvas utility tool for creating and drawing on HTML5 canvas",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "types/types.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Damian Kowalski",
+  "license": "ISC"
+}
