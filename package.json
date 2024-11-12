@@ -3,18 +3,21 @@
   "version": "1.0.0",
   "description": "Canvas utility tool for creating and drawing on HTML5 canvas",
   "type": "module",
-  "types": "types/types.d.ts",
+  "main": "dist/index.js",
   "files": [
     "dist"
   ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
-    "format": "prettier --write ."
+    "dev": "tsc --watch",
+    "format": "prettier --write .",
+    "check-exports": "attw --pack . --ignore-rules=cjs-resolves-to-esm"
   },
   "author": "Damian Kowalski",
   "license": "ISC",
   "devDependencies": {
+    "@arethetypeswrong/cli": "^0.17.0",
     "prettier": "^3.3.3"
   }
 }

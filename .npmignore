@@ -1,3 +1,8 @@
+# folders
 src
+demo
+
+# files
 .gitignore
 tsconfig.json
+index.html
