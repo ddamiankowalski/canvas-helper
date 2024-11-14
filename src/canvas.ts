@@ -1,3 +1,6 @@
+import { circle, clear } from "./draw.js";
+import { createScene } from "./scene.js";
+
 /**
  * Creates canvas helper instance
  * 
@@ -6,14 +9,16 @@
  */
 export const createHelper = (wrapper: HTMLElement)  => {
     const canvas = document.createElement('canvas');
-    wrapper.appendChild(canvas);
-    rescaleCanvas(canvas);
-
     const ctx = getContext(canvas);
-    ctx.beginPath();
-    ctx.arc(40, 40, 40, 0, 2 * Math.PI);
-    ctx.stroke();
-    return canvas;
+
+    wrapper.appendChild(canvas);
+    rescaleCanvas(canvas, wrapper);
+
+    return {
+        clear: clear(ctx),
+        circle: circle(ctx),
+        createScene
+    }
 }
 
 /**
@@ -21,17 +26,27 @@ export const createHelper = (wrapper: HTMLElement)  => {
  * 
  * @param canvas 
  */
-const rescaleCanvas = (canvas: HTMLCanvasElement) => {
-    const rect = canvas.getBoundingClientRect();
+const rescaleCanvas = (canvas: HTMLCanvasElement, wrapper: HTMLElement) => {
     const ctx = getContext(canvas);
 
-    canvas.width = rect.width * devicePixelRatio;
-    canvas.height = rect.height * devicePixelRatio;
+    const observer = new ResizeObserver(([entry]) => {
+        if(!entry) {
+            return;
+        }
+        
+        const rect = wrapper.getBoundingClientRect();
 
-    ctx.scale(devicePixelRatio, devicePixelRatio);
+        canvas.width = rect.width * devicePixelRatio;
+        canvas.height = rect.height * devicePixelRatio;
+    
+        ctx.scale(devicePixelRatio, devicePixelRatio);
+    
+        canvas.style.width = `${rect.width}px`;
+        canvas.style.height = `${rect.height}px`;
 
-    canvas.style.width = `${rect.width}px`;
-    canvas.style.height = `${rect.height}px`;
+    });
+
+    observer.observe(wrapper);
 }
 
 /**

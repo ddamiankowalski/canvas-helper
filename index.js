@@ -6,5 +6,11 @@ if(!wrapper) {
     throw new Error('Could not find the wrapper');
 }
 
-const canvas = createHelper(wrapper);
-console.log(canvas);
+const model = {
+    xPos: 0,
+    yPos: 0
+}
+
+const helper = createHelper(wrapper);
+
+const scene = helper.createScene(model);
