@@ -7,10 +7,12 @@ if(!wrapper) {
 }
 
 const model = {
-    xPos: 0,
-    yPos: 0
+    xPos: 100,
+    yPos: 100
 }
 
 const helper = createHelper(wrapper);
 
-const scene = helper.createScene(model);
+helper.setScene(draw => {
+    draw.circle(model.xPos, 50, 10)
+})

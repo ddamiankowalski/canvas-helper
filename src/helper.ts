@@ -1,4 +1,4 @@
-import { circle, clear } from "./draw.js";
+import { circle, clear, type IDraw } from "./draw.js";
 import { createScene } from "./scene.js";
 
 /**
@@ -10,14 +10,14 @@ import { createScene } from "./scene.js";
 export const createHelper = (wrapper: HTMLElement)  => {
     const canvas = document.createElement('canvas');
     const ctx = getContext(canvas);
+    
+    const { renderScene, setScene } = createScene(ctx);
 
+    rescaleCanvas(canvas, wrapper, renderScene);
     wrapper.appendChild(canvas);
-    rescaleCanvas(canvas, wrapper);
 
     return {
-        clear: clear(ctx),
-        circle: circle(ctx),
-        createScene
+        setScene
     }
 }
 
@@ -26,7 +26,11 @@ export const createHelper = (wrapper: HTMLElement)  => {
  * 
  * @param canvas 
  */
-const rescaleCanvas = (canvas: HTMLCanvasElement, wrapper: HTMLElement) => {
+const rescaleCanvas = (
+    canvas: HTMLCanvasElement, 
+    wrapper: HTMLElement, 
+    renderScene: () => void
+) => {
     const ctx = getContext(canvas);
 
     const observer = new ResizeObserver(([entry]) => {
@@ -44,6 +48,7 @@ const rescaleCanvas = (canvas: HTMLCanvasElement, wrapper: HTMLElement) => {
         canvas.style.width = `${rect.width}px`;
         canvas.style.height = `${rect.height}px`;
 
+        renderScene();
     });
 
     observer.observe(wrapper);

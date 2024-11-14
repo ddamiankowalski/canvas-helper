@@ -1,4 +1,12 @@
 /**
+ * Interface for the drawing helper object
+ */
+export interface IDraw {
+    clear: () => void,
+    circle: (x: number, y: number, radius: number) => void
+}
+
+/**
  * Clears the canvas
  * 
  * @param ctx 
@@ -24,7 +32,5 @@ export const circle = (ctx: CanvasRenderingContext2D) => {
         ctx.beginPath();
         ctx.arc(x, y, radius, 0, 2 * Math.PI);
         ctx.stroke();
-
-        console.log('teraz stroke')
     }
 }
