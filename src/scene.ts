@@ -1,3 +1,4 @@
+import { animate } from "./animation.js";
 import type { IDraw } from "./draw.js";
 import { circle, clear } from './draw.js';
 
@@ -18,6 +19,10 @@ export const createScene = (ctx: CanvasRenderingContext2D) => {
 
     const setScene = (step: (draw: IDraw) => void) => {
         renderStep = step;
+
+        return {
+            animate
+        }
     }
 
     return {

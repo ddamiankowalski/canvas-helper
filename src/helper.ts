@@ -1,4 +1,4 @@
-import { circle, clear, type IDraw } from "./draw.js";
+import { type IDraw } from "./draw.js";
 import { createScene } from "./scene.js";
 
 /**
@@ -10,7 +10,7 @@ import { createScene } from "./scene.js";
 export const createHelper = (wrapper: HTMLElement)  => {
     const canvas = document.createElement('canvas');
     const ctx = getContext(canvas);
-    
+
     const { renderScene, setScene } = createScene(ctx);
 
     rescaleCanvas(canvas, wrapper, renderScene);
