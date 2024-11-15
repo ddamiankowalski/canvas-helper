@@ -13,10 +13,9 @@ export const createModel = <T extends Record<string | symbol, any>>(target: T, r
                 Reflect.set(target, prop, value);
                 render();
             } else {
-                return false;
+                throw new Error('MODEL_ERROR: Could not set property');
             }
 
-            render();
             return true;
         }
     }

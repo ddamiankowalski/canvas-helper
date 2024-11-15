@@ -6,14 +6,16 @@ if(!wrapper) {
     throw new Error('Could not find the wrapper');
 }
 
-const model = {
+const initialModel = {
     xPos: 100,
     yPos: 100
 }
 
-const helper = createHelper(wrapper, model);
+const { model, setScene } = createHelper(wrapper, initialModel);
 
-helper.setScene(draw => {
+setScene(draw => {
     draw.clear();
     draw.circle(model.xPos, model.yPos, 10);
 })
+
+model.sxPos = 5;
