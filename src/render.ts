@@ -40,8 +40,6 @@ export const createScene = (ctx: CanvasRenderingContext2D) => {
 const createRenderer = (ctx: CanvasRenderingContext2D) => {
     let isRunning = false;
 
-    console.log(ctx.canvas)
-
     const draw = { 
         circle: circle(ctx), 
         clear: clear(ctx), 

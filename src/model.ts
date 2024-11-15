@@ -21,13 +21,8 @@ export const createModel = <T extends Record<string | symbol, any>>(target: T, r
 const createProxy = <T extends Record<string | symbol, any>>(target: T, render: RenderScene): T => {
     const handler: ProxyHandler<T> = {
         set(target: T, prop: string, value: any): boolean {
-            if(target[prop]) {
-                Reflect.set(target, prop, value);
-                render();
-            } else {
-                throw new Error('MODEL_ERROR: Could not set property');
-            }
-
+            Reflect.set(target, prop, value);
+            render();
             return true;
         }
     }
