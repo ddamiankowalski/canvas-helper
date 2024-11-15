@@ -10,21 +10,44 @@ export type RenderScene = () => void;
  * @param callback 
  */
 export const createScene = (ctx: CanvasRenderingContext2D) => {
-    let renderStep: RenderStep | null = null; 
+    const render = createRenderer();
+    let step: RenderStep | null = null;
 
     const renderScene: RenderScene = () => {
-        renderStep && renderStep({
-            circle: circle(ctx),
-            clear: clear(ctx)
-        });
+        if(!step) {
+            return;
+        }
+
+        render(step, ctx);
     }
 
-    const setScene = (step: RenderStep) => {
-        renderStep = step;
+    const setScene = (callback: RenderStep) => {
+        step = callback;
     }
 
     return {
         renderScene,
         setScene
+    }
+}
+
+/**
+ * Creates a render function that runs inside
+ * requestAnimationFrame
+ * 
+ * @returns
+ */
+const createRenderer = () => {
+    let isRunning = false;
+
+    return (step: RenderStep, ctx: CanvasRenderingContext2D) => {
+        if(!isRunning) {
+            isRunning = true;
+
+            requestAnimationFrame(() => {
+                step({ circle: circle(ctx), clear: clear(ctx) });
+                isRunning = false;
+            })
+        }
     }
 }

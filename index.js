@@ -13,9 +13,14 @@ const initialModel = {
 
 const { model, setScene } = createHelper(wrapper, initialModel);
 
-setScene(draw => {
+setScene((draw) => {
     draw.clear();
-    draw.circle(model.xPos, model.yPos, 10);
+    draw.circle(initialModel.xPos, initialModel.yPos, 10);
 })
 
-model.sxPos = 5;
+model.xPos = 50;
+
+setInterval(() => {
+    model.xPos = Math.random() - 0.5 + model.xPos;
+    model.yPos = Math.random() - 0.5 + model.yPos;
+}, 1)
