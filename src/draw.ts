@@ -3,7 +3,18 @@
  */
 export interface IDraw {
     clear: () => void,
-    circle: (x: number, y: number, radius: number) => void
+    circle: (x: number, y: number, radius: number) => void,
+    line: (points: Point[]) => void;
+    width: number;
+    height: number;
+}
+
+/**
+ * Type for point drawing
+ */
+type Point = {
+    x: number;
+    y: number;
 }
 
 /**
@@ -12,11 +23,8 @@ export interface IDraw {
  * @param ctx 
  */
 export const clear = (ctx: CanvasRenderingContext2D) => {
-    const width = ctx.canvas.width;
-    const height = ctx.canvas.height;
-
     return () => {
-        ctx.clearRect(0, 0, width, height);
+        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     }
 }
 
@@ -27,10 +35,33 @@ export const clear = (ctx: CanvasRenderingContext2D) => {
  */
 export const circle = (ctx: CanvasRenderingContext2D) => {
     return (x: number, y: number, radius: number) => {
-        ctx.strokeStyle = '#000';
         ctx.lineWidth = 3;
         ctx.beginPath();
         ctx.arc(x, y, radius, 0, 2 * Math.PI);
+        ctx.stroke();
+    }
+}
+
+/**
+ * Draws line on canvas
+ * 
+ * @param ctx 
+ * @returns 
+ */
+export const line = (ctx: CanvasRenderingContext2D) => {
+    return (points: Point[]) => {
+        ctx.beginPath();
+        
+        for(let i = 0; i < points.length; i++) {
+            const point = points[i];
+
+            if(point) {
+                i === 0 ? 
+                    ctx.moveTo(point.x, point.y) : 
+                    ctx.lineTo(point.x, point.y)
+            }
+        }
+
         ctx.stroke();
     }
 }

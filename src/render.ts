@@ -1,5 +1,5 @@
 import type { IDraw } from "./draw.js";
-import { circle, clear } from './draw.js';
+import { circle, clear, line } from './draw.js';
 
 export type RenderStep = (draw: IDraw) => void;
 export type RenderScene = () => void;
@@ -10,7 +10,7 @@ export type RenderScene = () => void;
  * @param callback 
  */
 export const createScene = (ctx: CanvasRenderingContext2D) => {
-    const render = createRenderer();
+    const render = createRenderer(ctx);
     let step: RenderStep | null = null;
 
     const renderScene: RenderScene = () => {
@@ -18,7 +18,7 @@ export const createScene = (ctx: CanvasRenderingContext2D) => {
             return;
         }
 
-        render(step, ctx);
+        render(step);
     }
 
     const setScene = (callback: RenderStep) => {
@@ -37,16 +37,30 @@ export const createScene = (ctx: CanvasRenderingContext2D) => {
  * 
  * @returns
  */
-const createRenderer = () => {
+const createRenderer = (ctx: CanvasRenderingContext2D) => {
     let isRunning = false;
 
-    return (step: RenderStep, ctx: CanvasRenderingContext2D) => {
+    console.log(ctx.canvas)
+
+    const draw = { 
+        circle: circle(ctx), 
+        clear: clear(ctx), 
+        line: line(ctx),
+    }
+
+    return (step: RenderStep) => {
         if(!isRunning) {
             isRunning = true;
 
             requestAnimationFrame(() => {
-                step({ circle: circle(ctx), clear: clear(ctx) });
                 isRunning = false;
+
+                draw.clear();
+                step({
+                    ...draw,
+                    width: parseFloat(ctx.canvas.style.width),
+                    height: parseFloat(ctx.canvas.style.height),
+                });
             })
         }
     }
