@@ -1,6 +1,8 @@
-import { animate } from "./animation.js";
 import type { IDraw } from "./draw.js";
 import { circle, clear } from './draw.js';
+
+export type RenderStep = (draw: IDraw) => void;
+export type RenderScene = () => void;
 
 /**
  * Registers a callback for drawing a scene
@@ -8,21 +10,17 @@ import { circle, clear } from './draw.js';
  * @param callback 
  */
 export const createScene = (ctx: CanvasRenderingContext2D) => {
-    let renderStep: ((draw: IDraw) => void) | null = null; 
+    let renderStep: RenderStep | null = null; 
 
-    const renderScene = () => {
+    const renderScene: RenderScene = () => {
         renderStep && renderStep({
             circle: circle(ctx),
             clear: clear(ctx)
         });
     }
 
-    const setScene = (step: (draw: IDraw) => void) => {
+    const setScene = (step: RenderStep) => {
         renderStep = step;
-
-        return {
-            animate
-        }
     }
 
     return {

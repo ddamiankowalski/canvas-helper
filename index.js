@@ -11,16 +11,9 @@ const model = {
     yPos: 100
 }
 
-const helper = createHelper(wrapper);
+const helper = createHelper(wrapper, model);
 
 helper.setScene(draw => {
-    setInterval(() => {
-        draw.clear();
-        draw.circle(model.xPos, model.yPos, 10);
-    }, 100)
+    draw.clear();
+    draw.circle(model.xPos, model.yPos, 10);
 })
-
-setInterval(() => {
-    model.xPos = model.xPos + 1;
-    model.yPos = model.yPos + 1;
-}, 100)

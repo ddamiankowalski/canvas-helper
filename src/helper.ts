@@ -1,4 +1,5 @@
 import { type IDraw } from "./draw.js";
+import { createModel } from "./model.js";
 import { createScene } from "./scene.js";
 
 /**
@@ -7,18 +8,25 @@ import { createScene } from "./scene.js";
  * @param wrapper 
  * @returns 
  */
-export const createHelper = (wrapper: HTMLElement)  => {
-    const canvas = document.createElement('canvas');
-    const ctx = getContext(canvas);
+export const createHelper = <T extends object>(wrapper: HTMLElement, initialModel: T)  => {
+    const { canvas, ctx } = createCanvas(wrapper);
 
     const { renderScene, setScene } = createScene(ctx);
-
     rescaleCanvas(canvas, wrapper, renderScene);
-    wrapper.appendChild(canvas);
 
     return {
-        setScene
+        setScene,
+        model: createModel(initialModel, renderScene)
     }
+}
+
+const createCanvas = (wrapper: HTMLElement) => {
+    const canvas = document.createElement('canvas');
+    const ctx = getContext(canvas);
+    
+    wrapper.appendChild(canvas);
+
+    return { canvas, ctx };
 }
 
 /**
