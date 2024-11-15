@@ -7,18 +7,16 @@ if(!wrapper) {
 }
 
 const initialModel = {
-    xPos: 100,
-    yPos: 100
+    xPos: 150,
+    yPos: 250
 }
 
 const { model, setScene } = createHelper(wrapper, initialModel);
 
 setScene((draw) => {
     draw.clear();
-    draw.circle(initialModel.xPos, initialModel.yPos, 10);
+    draw.circle(model.xPos, model.yPos, 10);
 })
-
-model.xPos = 50;
 
 setInterval(() => {
     model.xPos = Math.random() - 0.5 + model.xPos;

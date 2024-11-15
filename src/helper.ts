@@ -1,6 +1,5 @@
-import { type IDraw } from "./draw.js";
 import { createModel } from "./model.js";
-import { createScene } from "./scene.js";
+import { createScene } from "./render.js";
 
 /**
  * Creates canvas helper instance
@@ -20,6 +19,12 @@ export const createHelper = <T extends object>(wrapper: HTMLElement, initialMode
     }
 }
 
+/**
+ * Creates canvas
+ * 
+ * @param wrapper 
+ * @returns 
+ */
 const createCanvas = (wrapper: HTMLElement) => {
     const canvas = document.createElement('canvas');
     const ctx = getContext(canvas);

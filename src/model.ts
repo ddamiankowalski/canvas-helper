@@ -1,4 +1,4 @@
-import type { RenderScene } from "./scene.js";
+import type { RenderScene } from "./render.js";
 
 /**
  * Creates model for the canvas
