@@ -6,21 +6,22 @@ if(!wrapper) {
     throw new Error('Could not find the wrapper');
 }
 
-const initialModel = {
-    xPos: 150,
-    yPos: 250,
-    radius: 10
-}
-
-const { model, setScene } = createHelper(wrapper, initialModel);
+const { model, event, setScene } = createHelper(wrapper, {
+    xPos: 0,
+    yPos: 0,
+    visible: true
+});
 
 setScene((draw) => {
-    draw.circle(model.xPos, model.yPos, model.radius);
+    if(!model.visible) return;
+
+    draw.line([{ x: model.xPos, y: 0 }, { x: model.xPos, y: draw.height }])
+    draw.line([{ x: 0, y: model.yPos }, { x: draw.width, y: model.yPos }])
 })
 
-wrapper.addEventListener('mousemove', (ev) => {
-    const movement = Math.abs(Math.max(ev.movementX, ev.movementY)) * 2;
+event.on('click', () => model.visible = !model.visible);
+
+event.on('mousemove', ev => {
     model.xPos = ev.offsetX;
     model.yPos = ev.offsetY;
-    model.radius = movement;
 })

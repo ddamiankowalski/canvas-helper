@@ -35,7 +35,6 @@ export const clear = (ctx: CanvasRenderingContext2D) => {
  */
 export const circle = (ctx: CanvasRenderingContext2D) => {
     return (x: number, y: number, radius: number) => {
-        ctx.lineWidth = 3;
         ctx.beginPath();
         ctx.arc(x, y, radius, 0, 2 * Math.PI);
         ctx.stroke();

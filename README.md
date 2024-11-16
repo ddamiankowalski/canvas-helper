@@ -32,7 +32,7 @@ setScene((draw) => {
 ```
 
 ### Scene
-Scene is the context, in which the shapes and objects are rendered every time either the size of the canvas changes (when user changes the height/width of the window) or any of the value changes
+Scene is the context, in which the shapes and objects are rendered every time either the size of the canvas (when user changes the height/width of the window) or the model changes
 
 ### Model
 Model is the state that can be used from within the scene to render things on canvas using the draw utility tools. Keep in mind that every time the model object properties values change, the scene will also be re-rendered. This is useful because after defining the scene, the only thing needed to re-render the scene  is to change any properties inside the model

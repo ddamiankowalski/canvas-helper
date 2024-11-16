@@ -1,3 +1,4 @@
+import { createEvent } from "./event.js";
 import { createModel } from "./model.js";
 import { createScene } from "./render.js";
 
@@ -15,7 +16,8 @@ export const createHelper = <T extends object>(wrapper: HTMLElement, initialMode
 
     return {
         setScene,
-        model: createModel(initialModel, renderScene)
+        model: createModel(initialModel, renderScene),
+        event: createEvent(wrapper)
     }
 }
 
@@ -60,6 +62,9 @@ const rescaleCanvas = (
     
         canvas.style.width = `${rect.width}px`;
         canvas.style.height = `${rect.height}px`;
+        canvas.style.position = 'absolute';
+        canvas.style.top = '0px';
+        canvas.style.left = '0px';
 
         renderScene();
     });
