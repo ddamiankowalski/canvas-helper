@@ -49,4 +49,13 @@ describe('model', () => {
 
         expect(model.x).toBe(10)
     })
+
+    it('deleting a property throws an error', () => {
+        const initial = { x: 0 };
+        const model = createModel(initial, renderFn) as Record<string, any>;
+
+        expect(() => {
+            delete model['x'];
+        }).toThrow();
+    })
 })
