@@ -24,7 +24,11 @@ const createProxy = <T extends Record<string | symbol, any>>(target: T, render: 
             Reflect.set(target, prop, value);
             render();
             return true;
-        }
+        },
+
+        defineProperty() {
+            throw new Error('MODEL_ERROR: Cannot delete object property');
+        },
     }
 
     return new Proxy(target, handler);

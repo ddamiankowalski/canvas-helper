@@ -50,7 +50,7 @@ describe('draw', () => {
         expect(ctx.lineTo).toHaveBeenNthCalledWith(2, 10, 30);
     })
 
-    it('does not draw line if points lenght is 0', () => {
+    it('does not draw line if points length is 0', () => {
         const fn = line(ctx);
         fn([]);
 
