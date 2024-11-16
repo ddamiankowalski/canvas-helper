@@ -1,5 +1,5 @@
 {
-  "exclude": ["dist", "test", "jest.config.ts"],
+  "exclude": ["dist", "__test__", "jest.config.ts"],
   "include": ["src"],
   "compilerOptions": {
     /* Base Options: */
@@ -10,7 +10,7 @@
     "resolveJsonModule": true,
     "moduleDetection": "force",
     "isolatedModules": true,
-    "verbatimModuleSyntax": true,
+    "verbatimModuleSyntax": false,
 
     /* Strictness */
     "strict": true,

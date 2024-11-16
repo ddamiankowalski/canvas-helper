@@ -26,6 +26,10 @@
     "ts-jest": "^29.2.5"
   },
   "dependencies": {
-    "jest-environment-jsdom": "^29.7.0"
+    "i": "^0.3.7",
+    "jest-canvas-mock": "^2.5.2",
+    "jest-environment-jsdom": "^29.7.0",
+    "npm": "^10.9.0",
+    "resize-observer-polyfill": "^1.5.1"
   }
 }
