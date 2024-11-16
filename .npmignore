@@ -1,6 +1,8 @@
 # folders
 src
 demo
+coverage
+__test__
 
 # files
 .gitignore

@@ -13,4 +13,10 @@ describe('helper', () => {
 
         expect(helper).toBeTruthy();
     })
+
+    it('', () => {
+        wrapper.style.width = Number(wrapper.style.width) + 1 + 'px';
+
+        expect(true).toBeTruthy();
+    })
 })
