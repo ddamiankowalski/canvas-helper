@@ -50,6 +50,10 @@ export const circle = (ctx: CanvasRenderingContext2D) => {
  */
 export const line = (ctx: CanvasRenderingContext2D) => {
     return (points: Point[]) => {
+        if(points.length === 0) {
+            return;
+        }
+
         ctx.beginPath();
         
         for(let i = 0; i < points.length; i++) {
