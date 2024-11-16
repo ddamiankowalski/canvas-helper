@@ -1,5 +1,6 @@
 {
-  "exclude": ["dist", "test"],
+  "exclude": ["dist", "test", "jest.config.ts"],
+  "include": ["src"],
   "compilerOptions": {
     /* Base Options: */
     "esModuleInterop": true,
