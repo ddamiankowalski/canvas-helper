@@ -106,30 +106,31 @@ const addMoveSubject = (wrapper: HTMLElement) => {
  */
 const addKeySubject = () => {
     const subject = createSubject<ExtendedEvent>();
+    const interval = (cb: () => void) => setInterval(cb, 10);
 
     let pressed = new Set<string>();
-    let interval: ReturnType<typeof setInterval> | null = null;
+    let intervalRef: ReturnType<typeof setInterval> | null = null;
 
     document.addEventListener('keydown', event => {
         pressed.add(event.code);
 
-        if(!interval) {
-            interval = setInterval(() => subject.notify({ ...event, pressed }), 10);
+        if(!intervalRef) {
+            intervalRef = interval(() => subject.notify({ ...event, pressed }))
         }
     });
 
     document.addEventListener('keyup', event => {
         pressed.delete(event.code);
 
-        if(pressed.size === 0 && interval) {
-            clearInterval(interval);
-            interval = null;
+        if(pressed.size === 0 && intervalRef) {
+            clearTimeout(intervalRef);
+            intervalRef = null;
         }
     });
 
     document.addEventListener('visibilitychange', () => {
-        interval && clearInterval(interval);
-        interval = null;
+        intervalRef && clearTimeout(intervalRef);
+        intervalRef = null;
         pressed = new Set();
     })
 
