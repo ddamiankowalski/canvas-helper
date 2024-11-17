@@ -1,54 +1,95 @@
-import { createSubject } from "./subject.js";
+import { createSubject, SubjectInstance } from "./subject.js";
 
 /**
  * Event object
  */
-type ExtendedEvent = Event;
-
-/**
- * Callback for the event
- */
-type EventCallback = (event: ExtendedEvent) => void
+type ExtendedEvent = any;
 
 /**
  * Name of the event
  */
-type EventName = 'mousemove' | 'click' | 'keydown'
+type EventName = 'mousemove' | 'click' | 'keydown';
+
+/**
+ * Alias type for all subjects
+ */
+type AllSubjects = Map<EventName, SubjectInstance<ExtendedEvent>>;
 
 /**
  * Create event object that is used to listen 
  */
 export const createEvent = (wrapper: HTMLElement) => {
-    return { on: registerListener(wrapper) };
+    const subjects = createSubjects(wrapper);
+
+    return { 
+        on: (
+            name: EventName, 
+            callback: (event: ExtendedEvent) => void
+        ) => registerListener(name, callback, subjects)
+    };
 }
 
 /**
- * Registers a listener for an event
+ * Create all subjects for all possible events
+ */
+const createSubjects = (wrapper: HTMLElement) => {
+    const subjects: AllSubjects = new Map();
+
+    const events: EventName[] = ['mousemove', 'click', 'keydown'];
+    events.forEach(name => createEventSubject(name, wrapper, subjects))
+
+    return subjects;
+}
+
+/**
+ * Creates a single subject and adds it to all subjects
  * 
  * @param name 
- * @param callback 
+ * @param subjects 
  */
-const registerListener = (wrapper: HTMLElement) => {
-    const subject = createSubject('initial value');
-    
-    subject.subscribe(s => {
-        console.log(s);
-    })
+const createEventSubject = (name: EventName, wrapper: HTMLElement, subjects: AllSubjects) => {
+    const subject = createSubject<ExtendedEvent>();
 
-    setTimeout(() => {
-        subject.notify('test value')
-    }, 3000)
-
-    return (name: EventName, callback: EventCallback) => {
-        switch (name) {
-            case 'mousemove':
-                onMove(wrapper, callback)
-            case 'click':
-                onClick(wrapper, callback)
-            case 'keydown':
-                onKeydown(callback);
-        }
+    switch(name) {
+        case 'click':
+            subjects.set(name, addClickSubject(wrapper, subject));
+            break;
+        case 'mousemove':
+            subjects.set(name, addMoveSubject(wrapper, subject));
+            break;
+        case 'keydown':
+            subjects.set(name, addKeyDownSubject(subject))
     }
+
+    console.log(subject)
+}
+
+/**
+ * Registers an "on" callback
+ * 
+ * @param subjects 
+ * @returns 
+ */
+const registerListener = (name: EventName, callback: (event: ExtendedEvent) => void, subjects: AllSubjects) => {
+    const subject = subjects.get(name);
+
+    if(!subject) {
+        throw new Error(`EVENT_ERROR: Could not get subject for event: ${name}`);
+    }
+
+    subject.subscribe((event: ExtendedEvent) => callback(event));
+}
+
+/**
+ * Creates a click subject
+ * 
+ * @param wrapper 
+ * @param subject 
+ * @returns 
+ */
+const addClickSubject = (wrapper: HTMLElement, subject: SubjectInstance<ExtendedEvent>) => {
+    wrapper.addEventListener('click', event => subject.notify(event));
+    return subject;
 }
 
 /**
@@ -57,30 +98,15 @@ const registerListener = (wrapper: HTMLElement) => {
  * @param wrapper 
  * @param callback 
  */
-const onMove = (wrapper: HTMLElement, callback: EventCallback) => {
-    wrapper.addEventListener('mousemove', callback)
-}
-
-/**
- * On click callback
- * 
- * @param wrapper 
- * @param callback 
- */
-const onClick = (wrapper: HTMLElement, callback: EventCallback) => {
-    wrapper.addEventListener('click', callback)
+const addMoveSubject = (wrapper: HTMLElement, subject: SubjectInstance<ExtendedEvent>) => {
+    wrapper.addEventListener('mousemove', event => subject.notify(event));
+    return subject;
 }
 
 /**
  * On key down callback
  */
-const onKeydown = (callback: EventCallback) => {
-    const pressed = new Set();
-
-    document.addEventListener('keydown', ev => {
-        ev.preventDefault();
-        callback(ev);
-    });
-
-    document
+const addKeyDownSubject = (subject: SubjectInstance<ExtendedEvent>) => {
+    document.addEventListener('keydown', event => subject.notify(event));
+    return subject;
 }

@@ -4,11 +4,16 @@ type ObserverInstance = {
     notify: SubscribeCallback;
 };
 
+export type SubjectInstance<T> = {
+    subscribe: (callback: SubscribeCallback) => void;
+    notify: (value: T) => void; 
+}
+
 /**
  * Holds reference to the value emitted and all observers
  * @returns 
  */
-export const createSubject = <T>(initial: T | null = null) => {
+export const createSubject = <T>(initial: T | null = null): SubjectInstance<T> => {
     let current = initial;
     let observers: ObserverInstance[] = [];
 
