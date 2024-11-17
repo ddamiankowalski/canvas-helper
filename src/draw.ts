@@ -42,6 +42,18 @@ export const circle = (ctx: CanvasRenderingContext2D) => {
 }
 
 /**
+ * Draws a rectange on canvas
+ * 
+ * @param ctx 
+ * @returns 
+ */
+export const rect = (ctx: CanvasRenderingContext2D) => {
+    return (x: number, y: number, width: number, height: number) => {
+        ctx.fillRect(x, y, width, height);
+    }
+}
+
+/**
  * Draws line on canvas
  * 
  * @param ctx 
