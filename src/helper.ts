@@ -16,6 +16,7 @@ export const createHelper = <T extends object>(wrapper: HTMLElement, initialMode
 
     return {
         setScene,
+        ctx,
         model: createModel(initialModel, renderScene),
         event: createEvent(wrapper)
     }
@@ -81,7 +82,7 @@ const rescaleCanvas = (
 const getContext = (canvas: HTMLCanvasElement) => {
     const ctx = canvas.getContext('2d');
     if(!ctx) {
-        throw new Error('Could not get canvas 2d context');
+        throw new Error('HELPER_ERROR: Could not get canvas 2d context');
     }
 
     return ctx;
