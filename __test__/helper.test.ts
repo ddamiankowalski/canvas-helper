@@ -59,16 +59,23 @@ describe('helper', () => {
         expect(observeFn).toHaveBeenCalledWith(wrapper);
     })
 
-    it('observe function has been called ', () => {
+    it('rescales the canvas depending on #devicePixelRatio', () => {
         const { ctx } = createHelper(wrapper, {});
         global.devicePixelRatio = 2;
 
-        wrapper.style.width = '10px';
-        wrapper.style.height = '10px';
-        
         callback([{} as any]);
 
         expect(ctx.scale).toHaveBeenCalledTimes(1);
         expect(ctx.scale).toHaveBeenCalledWith(2, 2);
+    })
+
+    it('does not rescale the canvas if there was no entries in resize observer', () => {
+        const { ctx } = createHelper(wrapper, {});
+        global.devicePixelRatio = 2;
+
+        callback([]);
+
+        expect(ctx.scale).not.toHaveBeenCalledTimes(1);
+        expect(ctx.scale).not.toHaveBeenCalledWith(2, 2);
     })
 })
