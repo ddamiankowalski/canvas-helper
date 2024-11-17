@@ -1,5 +1,5 @@
 import type { IDraw } from "./draw.js";
-import { circle, clear, line, rect } from './draw.js';
+import { circle, clear, line, lineGraph, rect } from './draw.js';
 
 export type RenderStep = (draw: IDraw) => void;
 export type RenderScene = () => void;
@@ -44,6 +44,7 @@ const createRenderer = (ctx: CanvasRenderingContext2D) => {
         circle: circle(ctx), 
         clear: clear(ctx), 
         line: line(ctx),
+        lineGraph: lineGraph(ctx),
         rect: rect(ctx)
     }
 

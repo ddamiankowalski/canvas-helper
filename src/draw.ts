@@ -1,3 +1,5 @@
+import { lerp } from "./utils.js";
+
 /**
  * Interface for the drawing helper object
  */
@@ -5,9 +7,15 @@ export interface IDraw {
     clear: () => void,
     circle: (x: number, y: number, radius: number) => void,
     line: (points: Point[]) => void;
+    lineGraph: (values: number[]) => void;
     width: number;
     height: number;
 }
+
+/**
+ * Type for draw options
+ */
+type DrawOptions = { marginTop: number, marginBottom: number };
 
 /**
  * Type for point drawing
@@ -78,5 +86,34 @@ export const line = (ctx: CanvasRenderingContext2D) => {
         }
 
         ctx.stroke();
+    }
+}
+
+/**
+ * Draws a line graph
+ * 
+ * @param ctx 
+ * @returns 
+ */
+export const lineGraph = (ctx: CanvasRenderingContext2D) => {
+    const drawLineFn = line(ctx);
+
+    return (values: number[], opts: DrawOptions = { marginBottom: 0, marginTop: 0 }) => {
+        const { marginBottom, marginTop } = opts;
+        const totalMargin = marginBottom + marginTop;
+
+        const height = parseFloat(ctx.canvas.style.height) - totalMargin;
+        const width = parseFloat(ctx.canvas.style.width);     
+
+        const max = Math.max(...values);
+        const min = Math.min(...values);
+
+        const points: Point[] = values
+            .map((v, i) => ({
+                 x: width * i / (values.length - 1), 
+                 y: lerp(v, min, height, max, 0) + (marginTop)
+            }));
+
+        drawLineFn(points)
     }
 }

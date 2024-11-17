@@ -8,7 +8,7 @@ type ExtendedEvent = any;
 /**
  * Name of the event
  */
-type EventName = 'mousemove' | 'click' | 'keydown';
+type EventName = 'mousemove' | 'click' | 'key';
 
 /**
  * Alias type for all subjects
@@ -35,7 +35,7 @@ export const createEvent = (wrapper: HTMLElement) => {
 const createSubjects = (wrapper: HTMLElement) => {
     const subjects: AllSubjects = new Map();
 
-    const events: EventName[] = ['mousemove', 'click', 'keydown'];
+    const events: EventName[] = ['mousemove', 'click', 'key'];
     events.forEach(name => createEventSubject(name, wrapper, subjects))
 
     return subjects;
@@ -48,20 +48,16 @@ const createSubjects = (wrapper: HTMLElement) => {
  * @param subjects 
  */
 const createEventSubject = (name: EventName, wrapper: HTMLElement, subjects: AllSubjects) => {
-    const subject = createSubject<ExtendedEvent>();
-
     switch(name) {
         case 'click':
-            subjects.set(name, addClickSubject(wrapper, subject));
+            subjects.set(name, addClickSubject(wrapper));
             break;
         case 'mousemove':
-            subjects.set(name, addMoveSubject(wrapper, subject));
+            subjects.set(name, addMoveSubject(wrapper));
             break;
-        case 'keydown':
-            subjects.set(name, addKeyDownSubject(subject))
+        case 'key':
+            subjects.set(name, addKeySubject())
     }
-
-    console.log(subject)
 }
 
 /**
@@ -87,7 +83,8 @@ const registerListener = (name: EventName, callback: (event: ExtendedEvent) => v
  * @param subject 
  * @returns 
  */
-const addClickSubject = (wrapper: HTMLElement, subject: SubjectInstance<ExtendedEvent>) => {
+const addClickSubject = (wrapper: HTMLElement) => {
+    const subject = createSubject<ExtendedEvent>();
     wrapper.addEventListener('click', event => subject.notify(event));
     return subject;
 }
@@ -98,7 +95,8 @@ const addClickSubject = (wrapper: HTMLElement, subject: SubjectInstance<Extended
  * @param wrapper 
  * @param callback 
  */
-const addMoveSubject = (wrapper: HTMLElement, subject: SubjectInstance<ExtendedEvent>) => {
+const addMoveSubject = (wrapper: HTMLElement) => {
+    const subject = createSubject<ExtendedEvent>();
     wrapper.addEventListener('mousemove', event => subject.notify(event));
     return subject;
 }
@@ -106,7 +104,34 @@ const addMoveSubject = (wrapper: HTMLElement, subject: SubjectInstance<ExtendedE
 /**
  * On key down callback
  */
-const addKeyDownSubject = (subject: SubjectInstance<ExtendedEvent>) => {
-    document.addEventListener('keydown', event => subject.notify(event));
+const addKeySubject = () => {
+    const subject = createSubject<ExtendedEvent>();
+
+    let pressed = new Set<string>();
+    let interval: ReturnType<typeof setInterval> | null = null;
+
+    document.addEventListener('keydown', event => {
+        pressed.add(event.code);
+
+        if(!interval) {
+            interval = setInterval(() => subject.notify({ ...event, pressed }), 10);
+        }
+    });
+
+    document.addEventListener('keyup', event => {
+        pressed.delete(event.code);
+
+        if(pressed.size === 0 && interval) {
+            clearInterval(interval);
+            interval = null;
+        }
+    });
+
+    document.addEventListener('visibilitychange', () => {
+        interval && clearInterval(interval);
+        interval = null;
+        pressed = new Set();
+    })
+
     return subject;
 }
