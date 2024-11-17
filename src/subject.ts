@@ -42,6 +42,12 @@ export const createSubject = <T>(initial: T | null = null): SubjectInstance<T> =
     }
 }
 
+/**
+ * Creates an object that represents an observer
+ * 
+ * @param callback 
+ * @returns 
+ */
 const createObserver = <T>(callback: SubscribeCallback): ObserverInstance => {
     return {
         notify: callback
