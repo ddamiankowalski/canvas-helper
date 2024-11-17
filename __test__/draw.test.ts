@@ -1,4 +1,4 @@
-import { circle, clear, line, lineGraph } from './../src/draw';
+import { circle, clear, line, lineGraph, rect } from './../src/draw';
 
 describe('draw', () => {
     let ctx: CanvasRenderingContext2D;
@@ -24,7 +24,7 @@ describe('draw', () => {
         })
     })
 
-    describe('clear', () => {
+    describe('circle', () => {
         it('circle draws the circle on the canvas', () => {
             const x = 10;
             const y = 20;
@@ -68,6 +68,18 @@ describe('draw', () => {
 
     describe('rect', () => {
 
+        it('clear clears the canvas', () => {
+            const x = 10;
+            const y = 20;
+            const width = 50;
+            const height = 100;
+
+            const fn = rect(ctx);
+            fn(x, y, width, height);
+    
+            expect(ctx.fillRect).toHaveBeenCalledTimes(1);
+            expect(ctx.fillRect).toHaveBeenCalledWith(x, y, width, height);
+        })
     })
 
     describe('lineGraph', () => {
