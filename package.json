@@ -1,9 +1,10 @@
 {
   "name": "@javascripthub/canvas-helper",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Canvas utility tool for creating and drawing on HTML5 canvas",
   "type": "module",
   "main": "dist/index.js",
+  "repository": "github:ddamiankowalski/canvas-helper",
   "files": [
     "dist"
   ],
