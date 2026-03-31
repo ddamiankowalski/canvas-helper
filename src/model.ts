@@ -1,35 +1,40 @@
-import type { RenderScene } from "./render.js";
+import type { RenderScene } from './render.js';
 
 /**
  * Creates model for the canvas
- * 
- * @param target 
- * @returns 
+ *
+ * @param target
+ * @returns
  */
-export const createModel = <T extends Record<string | symbol, any>>(target: T, render: RenderScene) => {
-    const model = createProxy(target, render);
-    return model;
-}
+export const createModel = <T extends Record<string | symbol, any>>(
+  target: T,
+  render: RenderScene,
+) => {
+  return createProxy(target, render);
+};
 
 /**
  * Creates a proxy object with rendering
- * 
- * @param target 
- * @param render 
- * @returns 
+ *
+ * @param target
+ * @param render
+ * @returns
  */
-const createProxy = <T extends Record<string | symbol, any>>(target: T, render: RenderScene): T => {
-    const handler: ProxyHandler<T> = {
-        set(target: T, prop: string, value: any): boolean {
-            Reflect.set(target, prop, value);
-            render();
-            return true;
-        },
+const createProxy = <T extends Record<string | symbol, any>>(
+  target: T,
+  render: RenderScene,
+): T => {
+  const handler: ProxyHandler<T> = {
+    set(target: T, prop: string, value: any): boolean {
+      Reflect.set(target, prop, value);
+      render();
+      return true;
+    },
 
-        deleteProperty() {
-            throw new Error('MODEL_ERROR: Cannot delete object property');
-        },
-    }
+    deleteProperty() {
+      throw new Error('MODEL_ERROR: Cannot delete object property');
+    },
+  };
 
-    return new Proxy(target, handler);
-}
+  return new Proxy(target, handler);
+};
