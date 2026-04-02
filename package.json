@@ -1,6 +1,6 @@
 {
   "name": "@javascripthub/canvas-helper",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Canvas utility tool for creating and drawing on HTML5 canvas",
   "type": "module",
   "main": "dist/index.js",
@@ -9,7 +9,7 @@
     "dist"
   ],
   "scripts": {
-    "test": "jest",
+    "test": "jest --watch",
     "build": "tsc",
     "dev": "tsc --watch",
     "format": "prettier --write .",
