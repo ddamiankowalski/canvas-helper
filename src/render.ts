@@ -1,7 +1,7 @@
 import type { IDraw } from './draw.js';
 import { circle, clear, line, rect } from './draw.js';
 
-export type RenderStep = (draw: IDraw) => void;
+export type RenderFn = (draw: IDraw) => void;
 export type RenderScene = () => void;
 
 /**
@@ -10,24 +10,42 @@ export type RenderScene = () => void;
  * @param callback
  */
 export const createScene = (ctx: CanvasRenderingContext2D) => {
-  const render = createRenderer(ctx);
-  let step: RenderStep | null = null;
+  const renderer = createRenderer(ctx);
+  let renderFn: RenderFn | null = null;
 
   const renderScene: RenderScene = () => {
-    if (!step) {
+    if (!renderFn) {
       return;
     }
 
-    render(step);
+    renderer(renderFn);
   };
 
-  const setScene = (callback: RenderStep) => {
-    step = callback;
+  const setScene = (callback: RenderFn) => {
+    renderFn = callback;
   };
+
+  return () => {};
 
   return {
     renderScene,
     setScene,
+  };
+};
+
+/**
+ * Creates draw object used as first
+ * argument in render function
+ *
+ * @param ctx
+ * @returns
+ */
+const createDraw = (ctx: CanvasRenderingContext2D) => {
+  return {
+    circle: circle(ctx),
+    clear: clear(ctx),
+    line: line(ctx),
+    rect: rect(ctx),
   };
 };
 
@@ -51,14 +69,14 @@ const createRenderer = (ctx: CanvasRenderingContext2D) => {
     rect: rect(ctx),
   };
 
-  return (step: RenderStep) => {
+  return (renderFn: RenderFn) => {
     if (!isRunning) {
       isRunning = true;
 
       requestAnimationFrame(() => {
         isRunning = false;
 
-        step({
+        renderFn({
           ...draw,
           width: parseFloat(ctx.canvas.style.width),
           height: parseFloat(ctx.canvas.style.height),

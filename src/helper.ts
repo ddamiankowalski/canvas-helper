@@ -1,4 +1,3 @@
-import { createEvent } from './event.js';
 import { createModel } from './model.js';
 import { createScene } from './render.js';
 
@@ -30,7 +29,6 @@ export const createHelper = <T extends object>(
     destroy,
     ctx,
     model: createModel(initialModel, renderScene),
-    event: createEvent(wrapper),
   };
 };
 
