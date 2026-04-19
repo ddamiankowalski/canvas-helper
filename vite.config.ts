@@ -20,5 +20,6 @@ export default defineConfig({
       },
     },
     emptyOutDir: true,
+    copyPublicDir: false,
   },
 });
