@@ -1,29 +1,23 @@
 {
-  "exclude": ["dist", "__test__", "jest.config.ts"],
-  "include": ["src"],
   "compilerOptions": {
-    /* Base Options: */
-    "esModuleInterop": true,
+    "target": "es2023",
+    "module": "esnext",
+    "lib": ["ES2023", "DOM", "DOM.Iterable"],
+    "types": ["vite/client"],
     "skipLibCheck": true,
-    "target": "es2022",
-    "allowJs": false,
-    "resolveJsonModule": true,
+
+    /* Bundler mode */
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "verbatimModuleSyntax": true,
     "moduleDetection": "force",
-    "isolatedModules": true,
-    "verbatimModuleSyntax": false,
+    "noEmit": true,
 
-    /* Strictness */
-    "strict": true,
-    "noUncheckedIndexedAccess": true,
-    "noImplicitOverride": true,
-
-    /* If transpiling with TypeScript: */
-    "module": "NodeNext",
-    "outDir": "dist",
-    "rootDir": "src",
-    "sourceMap": true,
-
-    /* AND if you're building for a library: */
-    "declaration": true
-  }
+    /* Linting */
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "erasableSyntaxOnly": true,
+    "noFallthroughCasesInSwitch": true
+  },
+  "include": ["src"]
 }
