@@ -9,13 +9,29 @@ export class CavnvasHelper {
    */
   private _observer: ResizeObserver;
 
+  private _model = {
+    x: 0,
+    y: 0,
+  };
+
   constructor(private _wrapper: HTMLElement) {
     this._canvas = this._createCanvas();
     this._observer = this._observeSize();
 
     this._onWindowResize();
-    this._draw();
+
+    requestAnimationFrame(this._tick);
   }
+
+  private _tick = () => {
+    this._model = {
+      x: this._model.x + 1,
+      y: this._model.y + 1,
+    };
+
+    this._draw();
+    requestAnimationFrame(this._tick);
+  };
 
   get observer(): ResizeObserver {
     return this._observer;
@@ -107,8 +123,6 @@ export class CavnvasHelper {
 
     ctx.setTransform(1, 0, 0, 1, 0, 0);
     ctx.scale(dpr, dpr);
-
-    this._draw();
   }
 
   private _draw(): void {
@@ -132,7 +146,14 @@ export class CavnvasHelper {
     for (let row = 0; row < rows; row++) {
       for (let col = 0; col < cols; col++) {
         ctx.fillStyle = (row + col) % 2 === 0 ? 'red' : 'blue';
-        ctx.fillRect(col * tileSize, row * tileSize, tileSize, tileSize);
+
+        const { x, y } = this._model;
+        ctx.fillRect(
+          ((col * tileSize + x) % parseFloat(this._canvas.style.width)) - 5,
+          ((row * tileSize + y) % parseFloat(this._canvas.style.height)) - 5,
+          tileSize,
+          tileSize,
+        );
       }
     }
   }
