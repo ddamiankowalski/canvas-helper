@@ -1,5 +1,8 @@
 export class CavnvasHelper {
-  private _canvas = document.createElement('canvas');
+  /**
+   * Canvas element
+   */
+  private _canvas: HTMLCanvasElement;
 
   /**
    * Observer of the wrapper element
@@ -7,10 +10,13 @@ export class CavnvasHelper {
   private _observer: ResizeObserver;
 
   constructor(private _wrapper: HTMLElement) {
-    console.log('I am helper!', this._wrapper);
+    this._canvas = this._createCanvas();
     this._observer = this._observeSize();
 
-    this.ctx.fillRect(50, 50, 100, 100);
+    setTimeout(() => {
+      this.ctx.fillStyle = 'red';
+      this.ctx.fillRect(50, 50, 100, 100);
+    }, 2000);
   }
 
   get observer(): ResizeObserver {
@@ -29,6 +35,13 @@ export class CavnvasHelper {
     }
 
     return ctx;
+  }
+
+  private _createCanvas(): HTMLCanvasElement {
+    const canvas = document.createElement('canvas');
+    this._wrapper.appendChild(canvas);
+
+    return canvas;
   }
 
   private _observeSize(): ResizeObserver {
