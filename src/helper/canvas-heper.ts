@@ -1,9 +1,20 @@
 export class CavnvasHelper {
   private _canvas = document.createElement('canvas');
 
+  /**
+   * Observer of the wrapper element
+   */
+  private _observer: ResizeObserver;
+
   constructor(private _wrapper: HTMLElement) {
     console.log('I am helper!', this._wrapper);
-    this._resize();
+    this._observer = this._observeSize();
+
+    this.ctx.fillRect(50, 50, 100, 100);
+  }
+
+  get observer(): ResizeObserver {
+    return this._observer;
   }
 
   get wrapper(): HTMLElement {
@@ -20,15 +31,30 @@ export class CavnvasHelper {
     return ctx;
   }
 
-  private _resize(): void {
-    const wrapper = this.wrapper.getBoundingClientRect();
+  private _observeSize(): ResizeObserver {
+    return new ResizeObserver((entries) => {
+      const [entry] = entries;
+      const sizes = entry.devicePixelContentBoxSize;
+
+      if (sizes && sizes.length) {
+        const { inlineSize, blockSize } = sizes[0];
+        this._resize(inlineSize, blockSize);
+        return;
+      }
+
+      const rect = entry.contentRect;
+      this._resize(rect.width, rect.height);
+    });
+  }
+
+  private _resize(width: number, height: number): void {
     const dpr = window.devicePixelRatio || 1;
 
-    this._canvas.style.width = wrapper.width + 'px';
-    this._canvas.style.height = wrapper.height + 'px';
+    this._canvas.style.width = `${width}px`;
+    this._canvas.style.height = `${height}px`;
 
-    this._canvas.width = Math.round(wrapper.width * dpr);
-    this._canvas.height = Math.round(wrapper.height * dpr);
+    this._canvas.width = Math.round(width * dpr);
+    this._canvas.height = Math.round(height * dpr);
 
     this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   }
