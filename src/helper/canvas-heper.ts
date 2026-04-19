@@ -34,6 +34,10 @@ export class CavnvasHelper {
     return ctx;
   }
 
+  public draw(): void {
+    this._draw();
+  }
+
   private _createCanvas(): HTMLCanvasElement {
     const canvas = document.createElement('canvas');
     this._wrapper.appendChild(canvas);
@@ -68,7 +72,6 @@ export class CavnvasHelper {
   private _resize(width: number, height: number): void {
     const dpr = window.devicePixelRatio || 1;
 
-    console.log('resize');
     this._canvas.style.width = '100%';
     this._canvas.style.height = '100%';
 

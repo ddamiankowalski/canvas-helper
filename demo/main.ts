@@ -5,5 +5,5 @@ const wrapper = document.getElementById(ID);
 
 if (wrapper) {
   const helper = new CavnvasHelper(wrapper);
-  console.log(helper);
+  helper.draw();
 }
