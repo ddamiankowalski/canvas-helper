@@ -13,24 +13,9 @@ export const createScene = (ctx: CanvasRenderingContext2D) => {
   const renderer = createRenderer(ctx);
   let renderFn: RenderFn | null = null;
 
-  const renderScene: RenderScene = () => {
-    if (!renderFn) {
-      return;
-    }
-
-    renderer(renderFn);
-  };
-
-  const setScene = (callback: RenderFn) => {
-    renderFn = callback;
-  };
+  const draw = createDraw(ctx);
 
   return () => {};
-
-  return {
-    renderScene,
-    setScene,
-  };
 };
 
 /**
