@@ -13,8 +13,7 @@ export class CavnvasHelper {
     this._canvas = this._createCanvas();
     this._observer = this._observeSize();
 
-    window.addEventListener('resize', () => this._resize());
-
+    this._onWindowResize();
     this._draw();
   }
 
@@ -40,6 +39,10 @@ export class CavnvasHelper {
     this._draw();
   }
 
+  private _onWindowResize(): void {
+    window.addEventListener('resize', () => this._resize());
+  }
+
   private _createCanvas(): HTMLCanvasElement {
     const canvas = document.createElement('canvas');
     this._wrapper.appendChild(canvas);
@@ -49,24 +52,19 @@ export class CavnvasHelper {
 
   private _observeSize(): ResizeObserver {
     const observer = new ResizeObserver((entries) => {
-      console.log('resize');
-
       const [entry] = entries;
       const sizes = entry.devicePixelContentBoxSize;
 
       if (sizes && sizes.length) {
         const { inlineSize, blockSize } = sizes[0];
 
-        // devicePixelContentBoxSize values are already in physical pixels,
-        // so pass them directly without DPR scaling in _resize
-        this._resizePhysical(inlineSize, blockSize);
+        this._resizeDevice(inlineSize, blockSize);
         this._draw();
-
         return;
       }
 
       const rect = entry.contentRect;
-      this._resize([rect] as rects);
+      this._resize(rect.width, rect.height);
       this._draw();
     });
 
@@ -74,14 +72,14 @@ export class CavnvasHelper {
     return observer;
   }
 
-  private _resizePhysical(physicalWidth: number, physicalHeight: number): void {
+  private _resizeDevice(width: number, height: number): void {
     const dpr = window.devicePixelRatio || 1;
 
-    this._canvas.width = physicalWidth;
-    this._canvas.height = physicalHeight;
+    this._canvas.width = width;
+    this._canvas.height = height;
 
-    this._canvas.style.width = `${physicalWidth / dpr}px`;
-    this._canvas.style.height = `${physicalHeight / dpr}px`;
+    this._canvas.style.width = `${width / dpr}px`;
+    this._canvas.style.height = `${height / dpr}px`;
     this._canvas.style.display = 'block';
 
     const ctx = this.ctx;
@@ -89,10 +87,10 @@ export class CavnvasHelper {
     ctx.scale(dpr, dpr);
   }
 
-  private _resize(rects = this._wrapper.getClientRects()): void {
-    const [rect] = rects;
-    const { width, height } = rect;
-
+  private _resize(
+    width = this._wrapper.getBoundingClientRect().width,
+    height = this._wrapper.getBoundingClientRect().height,
+  ): void {
     const dpr = window.devicePixelRatio || 1;
 
     const pixelW = Math.round(width * dpr);
@@ -109,6 +107,8 @@ export class CavnvasHelper {
 
     ctx.setTransform(1, 0, 0, 1, 0, 0);
     ctx.scale(dpr, dpr);
+
+    this._draw();
   }
 
   private _draw(): void {
